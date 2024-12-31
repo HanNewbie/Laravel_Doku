@@ -26,12 +26,11 @@ Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('h
 Route::get('detail/{car:slug}', [\App\Http\Controllers\HomeController::class, 'detail'])->name('detail');
 Route::get('contact', [\App\Http\Controllers\HomeController::class, 'contact'])->name('contact');
 Route::post('contact', [\App\Http\Controllers\HomeController::class, 'contactStore'])->name('contact.store');
-Route::get('bayar/{car:slug}', [\App\Http\Controllers\HomeController::class, 'bayar'])->name('bayar');
 
+Route::get('bayar/{car:slug}', [\App\Http\Controllers\HomeController::class, 'bayar'])->name('bayar');
+Route::post('bayar/{car:slug}', [\App\Http\Controllers\HomeController::class, 'bayarStore'])->name('bayars.store');
 
 Route::post('/checkout', [HomeController::class, 'bayarStore']);
-Route::post('bayar/{car:slug}', [\App\Http\Controllers\HomeController::class, 'bayarStore']);
-Route::post('/bayar', [\App\Http\Controllers\HomeController::class, 'bayarStore']);
 Route::get('/invoice/{orders_id}', [\App\Http\Controllers\HomeController::class, 'invoice'])->name('invoice');
 
 Route::group(['middleware' => 'is_admin', 'prefix' => 'admin', 'as' => 'admin.'], function(){

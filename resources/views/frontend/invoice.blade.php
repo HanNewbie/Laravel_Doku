@@ -94,7 +94,7 @@
             <strong>Harga:</strong>
           </div>
           <div class="col-6 text-end">
-            <span class="fw-bold text-dark">Rp.{{ number_format($bayars->harga, 0, ',', '.') }}</span>
+            <span class="fw-bold text-dark">Rp{{ number_format($bayars->harga, 0, ',', '.') }}</span>
           </div>
         </div>
         <div class="row mb-3">

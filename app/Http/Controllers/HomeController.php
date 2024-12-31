@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\Message;
 use App\Models\Car;
 use App\Models\bayar;
-use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Str;
 
 
@@ -50,16 +49,11 @@ class HomeController extends Controller
         return view('frontend.bayar', compact('car'));
     }
 
-
-    private $clientID = 'BRN-0238-1735638119953';
-    private $secretKey = 'SK-I84fz79o7gd30nFb0kMN';
-    private $environmentURL = "https://api-sandbox.doku.com/checkout/v1/payment";
-
-    public function __construct($clientID = 'BRN-0238-1735638119953', $secretKey = 'SK-I84fz79o7gd30nFb0kMN', $environmentURL = "https://api-sandbox.doku.com/checkout/v1/payment")
+    public function __construct()
     {
-        $this->clientID = $clientID;
-        $this->secretKey = $secretKey;
-        $this->environmentURL = $environmentURL;
+        $this->clientID = env('DOKU_CLIENT_ID');
+        $this->secretKey = env('DOKU_SECRET_KEY');
+        $this->environmentURL = env('DOKU_ENVIRONMENT_URL');
     }
 
     public function bayarStore(Request $request, $slug)

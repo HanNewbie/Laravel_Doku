@@ -9,7 +9,7 @@ use App\Models\Bayar;
 class BayarController extends Controller
 {
     public function index(){
-        $bayars = Bayar::where('status', 'Paid')->latest()->get();
+        $bayars = Bayar::latest()->get();
         return view('admin.bayars.index', compact('bayars'));
     }
 
