@@ -41,7 +41,7 @@
                 <h5 class="fw-bolder">{{$car->nama_mobil}}</h5>
                 <!-- Product price-->
                 <div class="rent-price mb-3">
-                  <span class="text-primary">Rp.{{number_format($car->harga_sewa)}}/</span>day
+                  <span class="text-primary">Rp{{number_format($car->harga_sewa, 0, ',', '.')}}/</span>day
                 </div>
                 <ul class="list-unstyled list-style-group">
                   <li

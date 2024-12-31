@@ -17,12 +17,12 @@
       <!-- Mobil -->
       <ul class="list-unstyled list-style-group mx-auto" style="max-width: 400px;">
         <li class="border-bottom p-2 d-flex justify-content-between">
-          <span>Mobil </span>
+          <span>Mobil</span>
           <span style="font-weight: 600">{{ $bayars->mobil }}</span>
         </li>
         <li class="border-bottom p-2 d-flex justify-content-between">
-          <span>Total Harga </span>
-          <span style="font-weight: 600">Rp.{{ $bayars->harga_total}}</span>
+          <span>Total Harga</span>
+          <span class="fw-bold text-dark">Rp{{ number_format($bayars->harga_total, 0, ',', '.') }}</span>
         </li>
         <li class="border-bottom p-2 d-flex justify-content-between">
           <span>Nama</span>
@@ -34,56 +34,51 @@
         </li>
       </ul>
       <button
-      type="button"
-      style="height: 50px; width: 200px;"
-      class="btn btn-danger"
-      onclick="location.href='/';">
-      Batal
-  </button>
-  <button
-      type="submit"
-      style="height: 50px; width: 200px;"
-      class="btn btn-primary" 
-      id="pay-button">
-      Bayar Sekarang
-  </button>
+        type="button"
+        style="height: 50px; width: 200px;"
+        class="btn btn-danger"
+        onclick="location.href='/';">
+        Batal
+      </button>
+      <button
+        type="button"
+        style="height: 50px; width: 200px;"
+        class="btn btn-primary" 
+        id="checkout-button">
+        Bayar Sekarang
+      </button>
     </div>
   </div>
-  
 
-  <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{config('midtrans.clientKey')}}"></script>
+  <script src="https://sandbox.doku.com/jokul-checkout-js/v1/jokul-checkout-1.0.0.js"></script>
 
-  <script type="text/javascript">
-  
-    // For example trigger on button clicked, or any time you need
-    var payButton = document.getElementById('pay-button');
+  <script>
+    document.getElementById('checkout-button').addEventListener('click', async () => {
+        try {
+            // Get the payment URL from the response passed from the controller
+            const paymentUrl = "{{ $paymentUrl ?? '' }}"; // Pastikan paymentUrl ada
 
-    payButton.addEventListener('click', function () {
-      event.preventDefault();
-      // Trigger snap popup. @TODO: Replace TRANSACTION_TOKEN_HERE with your transaction token.
-      
-      window.snap.pay('{{$snapToken}} ', {
-        onSuccess: function (result) {
-          /* You may add your own implementation here */
-          // alert("payment success!"); 
-          window.location.href = '/invoice/{{$bayars->orders_id}}'
-          console.log(result);
-        },
-        onPending: function (result) {
-          /* You may add your own implementation here */
-          alert("wating your payment!"); console.log(result);
-        },
-        onError: function (result) {
-          /* You may add your own implementation here */
-          alert("payment failed!"); console.log(result);
-        },
-        onClose: function () {
-          /* You may add your own implementation here */
-          alert('you closed the popup without finishing the payment');
+            if (!paymentUrl) {
+                throw new Error('Payment URL not found');
+            }
+
+            // Trigger Doku Checkout popup
+            loadJokulCheckout(paymentUrl);
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan saat memproses pembayaran. Silakan coba lagi.');
         }
-      });
     });
   </script>
+
+   <script>
+        document.querySelectorAll('iframe').forEach((iframe) => {
+            iframe.setAttribute('height', '');
+            iframe.setAttribute('width', '');
+            iframe.classList.add('w-full');
+            iframe.classList.add('h-full');
+        });
+    </script>
 
 </section>
 

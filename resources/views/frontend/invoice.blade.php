@@ -56,42 +56,107 @@
 
  {{-- INVOICE --}}
  <section class="py-5">
-  <div class="card-body card-body-custom pt-10">
-    <div class="invoice-border mx-auto" style="max-width: 450px; border: 2px solid #000; border-radius: 5px; padding: 20px;">
-    <div class="text-center">
-      <h3 class="mb-4">INVOICE</h3>
-      <!-- Mobil -->
-      <ul class="list-unstyled list-style-group mx-auto" style="max-width: 400px;">
-        <li class="border-bottom p-2 d-flex justify-content-between">
-          <span>Nama</span>
-          <span style="font-weight: 600">{{ $bayars->nama }}</span>
-        </li>
-        <li class="border-bottom p-2 d-flex justify-content-between">
-          <span>Nomor handphone</span>
-          <span style="font-weight: 600">{{ $bayars->nomor }}</span>
-        </li>
-        <li class="border-bottom p-2 d-flex justify-content-between">
-          <span>Mobil </span>
-          <span style="font-weight: 600">{{ $bayars->mobil }}</span>
-        </li>
-        <li class="border-bottom p-2 d-flex justify-content-between">
-          <span>Harga </span>
-          <span style="font-weight: 600">Rp.{{ $bayars->harga }}</span>
-        </li>
-        <li class="border-bottom p-2 d-flex justify-content-between">
-          <span>Hari </span>
-          <span style="font-weight: 600">{{ $bayars->hari }}</span>
-        </li>
-        <li class="border-bottom p-2 d-flex justify-content-between">
-          <span>Total Harga </span>
-          <span style="font-weight: 600">Rp.{{ $bayars->harga_total}}</span>
-        </li>
-        <li class="border-bottom p-2 d-flex justify-content-between">
-          <span>Satus</span>
-          <span style="font-weight: 600">{{ $bayars->status }}</span>
-        </li>
-      </ul>
+  <div class="card-body pt-10">
+    <div class="invoice-container mx-auto" style="max-width: 600px; border: 1px solid #ddd; border-radius: 8px; padding: 30px; background-color: #f9f9f9;">
+      <div class="text-center mb-4">
+        <h3 class="text-dark">INVOICE</h3>
+        <p class="text-muted">Detail Penyewaan Anda</p>
+      </div>
+
+      <!-- Invoice Details -->
+      <div class="invoice-details">
+        <div class="row mb-3">
+          <div class="col-6">
+            <strong>Nama:</strong>
+          </div>
+          <div class="col-6 text-end">
+            <span class="fw-bold text-dark">{{ $bayars->nama }}</span>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-6">
+            <strong>Nomor Handphone:</strong>
+          </div>
+          <div class="col-6 text-end">
+            <span class="fw-bold text-dark">{{ $bayars->nomor }}</span>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-6">
+            <strong>Mobil:</strong>
+          </div>
+          <div class="col-6 text-end">
+            <span class="fw-bold text-dark">{{ $bayars->mobil }}</span>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-6">
+            <strong>Harga:</strong>
+          </div>
+          <div class="col-6 text-end">
+            <span class="fw-bold text-dark">Rp.{{ number_format($bayars->harga, 0, ',', '.') }}</span>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-6">
+            <strong>Hari:</strong>
+          </div>
+          <div class="col-6 text-end">
+            <span class="fw-bold text-dark">{{ $bayars->hari }}</span>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-6">
+            <strong>Total Harga:</strong>
+          </div>
+          <div class="col-6 text-end">
+            <span class="fw-bold text-dark">Rp{{ number_format($bayars->harga_total, 0, ',', '.') }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Note -->
+      <div class="text-center mt-5">
+        <p class="text-muted">Terimakasih telah memilih dan percaya kepada Rentalin!</p>
+      </div>
     </div>
   </div>
+</section>
+
+<style>
+  .invoice-container {
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .invoice-details {
+    font-family: 'Arial', sans-serif;
+  }
+
+  .invoice-details .row {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+  }
+
+  .invoice-details .row:last-child {
+    border-bottom: none;
+  }
+
+  .text-primary {
+    color: #007bff !important;
+  }
+
+  .fw-bold {
+    font-weight: 600;
+  }
+
+  .text-muted {
+    color: #6c757d !important;
+  }
+
+  .text-dark {
+    color: #343a40 !important;
+  }
+</style>
 
 </html>

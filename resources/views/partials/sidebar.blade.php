@@ -1,7 +1,7 @@
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/admin">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/admin/dashboard">
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
@@ -30,7 +30,7 @@
     <li class="nav-item active">
         <a class="nav-link" href="/admin/messages">
             <i class="fas fa-envelope fa-fw"></i>
-            <span>Daftar Komplain</span></a>
+            <span>Daftar Pesan</span></a>
     </li>
 
     <hr class="sidebar-divider">

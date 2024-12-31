@@ -10,6 +10,11 @@
     <meta name="author" content="">
 
     <title>Admin Rentalin</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <!-- Custom fonts for this template-->
     <link href="{{asset('backend/vendor/fontawesome/-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
@@ -19,6 +24,7 @@
 
     <!-- Custom styles for this template-->
     <link href="{{asset('backend/css/sb-admin-2.min.css')}}" rel="stylesheet">
+    <link rel="icon" href="uploads/telu.ico" />
 
 </head>
 

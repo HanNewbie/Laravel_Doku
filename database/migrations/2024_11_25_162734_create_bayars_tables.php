@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('nomor');            
             $table->integer('hari');
             $table->bigInteger('harga_total');
-            $table->enum('status', ['Unpaid', 'Paid']);
             $table->timestamps();
         });
     }

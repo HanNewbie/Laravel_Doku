@@ -26,11 +26,12 @@
                             <tr>
                                 <td>{{$loop->iteration}}</td>
                                 <td>{{$bayar->mobil}}</td>
-                                <td>Rp.{{$bayar->harga}}</td>
+                                <td>Rp{{ number_format($bayar->harga, 0, ',', '.') }}</td>
                                 <td>{{$bayar->hari}}</td>
-                                <td>Rp.{{$bayar->harga_total}}</td>
+                                <td>Rp{{ number_format($bayar->harga_total, 0, ',', '.') }}</td>
                                 <td>{{$bayar->nama}}</td>
                                 <td>{{$bayar->nomor}}</td>
+                               
                                 <td>                              
                                     <a href="/invoice/{{ $bayar->orders_id }}" class="btn btn-primary btn-sm">Invoice</a>                                 
                                 <td>

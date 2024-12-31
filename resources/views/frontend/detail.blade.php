@@ -78,7 +78,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="fw-bolder">{{$car->nama_mobil}}</h5>
                                     <div class="rent-price mb-3">
-                                        <span style="font-size: 1rem" class="text-primary">Rp.{{number_format($car->harga_sewa)}}/</span>day
+                                        <span style="font-size: 1rem" class="text-primary">Rp{{number_format($car->harga_sewa, 0, ',', '.')}}/</span>day
                                     </div>
                                 </div>
                                 <ul class="list-unstyled list-style-group">
