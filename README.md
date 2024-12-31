@@ -25,7 +25,3 @@
 ```bash
    php artisan serve
 ```
-
-#### Login Admin
--   Email    = admin@example.com
--   Password = 123
