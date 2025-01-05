@@ -56,13 +56,13 @@
     document.getElementById('checkout-button').addEventListener('click', async () => {
         try {
             // Get the payment URL from the response passed from the controller
-            const paymentUrl = "{{ $paymentUrl ?? '' }}"; // Pastikan paymentUrl ada
+            const paymentUrl = "{{ $paymentUrl ?? '' }}";
 
             if (!paymentUrl) {
                 throw new Error('Payment URL not found');
             }
 
-            // Trigger Doku Checkout popup
+            // Trigger Doku Checkout
             loadJokulCheckout(paymentUrl);
         } catch (error) {
             console.error('Error:', error);
@@ -70,15 +70,6 @@
         }
     });
   </script>
-
-   <script>
-        document.querySelectorAll('iframe').forEach((iframe) => {
-            iframe.setAttribute('height', '');
-            iframe.setAttribute('width', '');
-            iframe.classList.add('w-full');
-            iframe.classList.add('h-full');
-        });
-    </script>
 
 </section>
 

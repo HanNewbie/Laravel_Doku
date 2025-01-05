@@ -31,12 +31,38 @@
                                 <td>{{$car->status}}</td>
                                 <td>
                                 <a href="{{route('admin.cars.edit', $car->id)}}" class="btn btn-sm btn-warning">Edit</a>
-                                <form onclick="return confirm('Yakin dihapus?')" class="d-inline" action="{{route('admin.cars.destroy', $car->id)}}" method="post">
+                                <form id="delete-form-{{ $car->id }}" class="d-inline" action="{{ route('admin.cars.destroy', $car->id) }}" method="post">
                                     @csrf
                                     @method('delete')
-                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                </form> 
-                                </td>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete({{ $car->id }})">Delete</button>
+                                </form>
+                                
+                                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                                    <script>
+                                        function confirmDelete(messageId) {
+                                            Swal.fire({
+                                                title: "Yakin dihapus?",
+                                                text: "Data yang dihapus tidak dapat dikembalikan!",
+                                                icon: "warning",
+                                                showCancelButton: true,
+                                                confirmButtonColor: "#3085d6",
+                                                cancelButtonColor: "#d33",
+                                                confirmButtonText: "Ya, Hapus!",
+                                                cancelButtonText: "Batal"
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    // Submit the corresponding form
+                                                    document.getElementById(`delete-form-${messageId}`).submit();
+                                                    Swal.fire({
+                                                        title: "Berhasil Dihapus!",
+                                                         text: "Data Berhasil Dihapus",
+                                                          icon: "success"
+                                                     });
+                                                }
+                                            });
+                                        }
+                                    </script>                               
+                    
                             </tr>
                             @empty
                                 <tr>

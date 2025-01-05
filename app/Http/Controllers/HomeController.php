@@ -49,114 +49,122 @@ class HomeController extends Controller
         return view('frontend.bayar', compact('car'));
     }
 
-    public function __construct()
-    {
-        $this->clientID = env('DOKU_CLIENT_ID');
-        $this->secretKey = env('DOKU_SECRET_KEY');
-        $this->environmentURL = env('DOKU_ENVIRONMENT_URL');
-    }
-
     public function bayarStore(Request $request, $slug)
     {
-        // Fetch car details by slug
+        // Ambil data mobil berdasarkan slug
         $car = Car::where('slug', $slug)->first();
 
-        // Validate request data
+        // Validasi input dari request
         $validatedData = $request->validate([
             'mobil' => 'required',
             'harga' => 'required',
             'nama' => 'required',
             'nomor' => 'required',
             'hari' => 'required',
-            'status' => 'Unpaid',
         ]);
 
-        // Calculate total price based on rental days
+        // Validasi input dari request
         $hargaTotal = $validatedData['harga'] * $validatedData['hari'];
 
-        // Add total price and generate unique order ID
+        // Tambahkan harga_total ke dalam data yang akan disimpan
         $validatedData['harga_total'] = $hargaTotal;
+
+        // Generate ID unik
         $validatedData['orders_id'] = uniqid();
 
-        // Save payment details to the database
+        // Simpan data pembayaran ke database
         $bayars = Bayar::create($validatedData);
 
-        // Construct order details for Doku
+        // Buat parameter transaksi untuk Doku
         $orderDetails = [
             'order' => [
                 'invoice_number' => $bayars->orders_id,
                 'amount' => $bayars->harga_total,
                 'currency' => 'IDR',
+                'line_items' => [
+                    [
+                        'name' => $bayars->mobil,
+                        'quantity' => $bayars->hari,
+                        'price' => $bayars->harga,
+                    ],
+                ],
                 'callback_url' =>  route('homepage'),
                 'callback_url_cancel' =>  route('homepage'),
-                'callback_url_result' => route('invoice', ['orders_id' => $bayars->orders_id])
+                'callback_url_result' => "http://rentalin.great-site.net/invoice/{$bayars->orders_id}",
             ],
             'payment' => [
-                'payment_due_date' => 60 * 3,
+                'payment_due_date' => 60,
             ],
             'customer' => [
-                'id' => $bayars->nama,
                 'name' => $bayars->nama,
-                'country' => 'ID',
                 'phone' => $bayars->nomor,
             ],
-            'item_details' => [
-                [
-                    'id' => $bayars->orders_id,
-                    'name' => $bayars->mobil,
-                    'quantity' => $bayars->hari,
-                    'price' => $bayars->harga,
-                ],
-            ],
         ];
+    
+        // Parameter untuk autentikasi
+        $clientID = config('doku.client_id');
+        $secretKey = config('doku.secret_key');
+        $environmentURL = config('doku.environment_url');
 
-        // Signature and headers
-        $url = $this->environmentURL;
         $uniqueID = (string)\Illuminate\Support\Str::uuid()->toString();
         $timeNow = gmdate('Y-m-d\TH:i:s\Z');
         $requestTarget = "/checkout/v1/payment";
-
+    
+        // Membuat digest (hash SHA-256) dari detail pesanan
         $digest = base64_encode(hash('sha256', json_encode($orderDetails), true));
-        $digestBody = "Client-Id:{$this->clientID}\n" .
+
+        // Membuat body digest untuk menghasilkan signature HMAC
+        $digestBody = "Client-Id:{$clientID}\n" .
             "Request-Id:{$uniqueID}\n" .
             "Request-Timestamp:{$timeNow}\n" .
             "Request-Target:{$requestTarget}\n" .
             "Digest:{$digest}";
-        $signature = "HMACSHA256=" . base64_encode(hash_hmac('sha256', $digestBody, $this->secretKey, true));
-
+        
+        // Membuat signature HMAC menggunakan secret key
+        $signature = "HMACSHA256=" . base64_encode(hash_hmac('sha256', $digestBody, $secretKey, true));
+    
+        // Menyusun header untuk ke Doku 
         $headers = [
             "Content-Type: application/json",
-            "Client-Id: {$this->clientID}",
+            "Client-Id: {$clientID}",
             "Request-Id: {$uniqueID}",
             "Request-Timestamp: {$timeNow}",
             "Signature: {$signature}",
         ];
-
+    
+        // Menyiapkan body request yang berisi detail pesanan dalam format JSON
         $body = json_encode($orderDetails);
-        $ch = curl_init($this->environmentURL);
+
+        // Mengirimkan request POST ke Doku API menggunakan cURL
+        $ch = curl_init($environmentURL); 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
-
-        $response = curl_exec($ch);
+    
+        $response = curl_exec($ch);  // Menjalankan request
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-
+        curl_close($ch); 
+    
+        // Menangani response dari API Doku
         if ($httpCode != 200) {
             throw new \Exception("Error: {$response}");
         } else {
-            $result = json_decode($response, true);
-
+            $result = json_decode($response, true); // Mengdecode response JSON menjadi array
+    
+            // Memeriksa apakah URL pembayaran ada di response
             if (isset($result['response']['payment']['url'])) {
-                $paymentUrl = $result['response']['payment']['url']; // URL pembayaran
+                $paymentUrl = $result['response']['payment']['url'];
             } else {
                 throw new \Exception('Payment URL not found in response.');
             }
+
+            // Mengembalikan tampilan dengan data pembayaran dan URL pembayaran untuk melanjutkan pembayaran
             return view('frontend.sewa', compact('result', 'bayars', 'paymentUrl'));
         }
     }
 
+    
     public function invoice($orders_id){
         $bayars = Bayar::find($orders_id);
         return view('frontend.invoice', compact('bayars'));

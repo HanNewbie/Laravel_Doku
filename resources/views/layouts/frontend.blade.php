@@ -12,6 +12,8 @@
     <!-- Favicon-->
     <link rel="icon" href="uploads/telu.ico" />
     <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
       rel="stylesheet"
