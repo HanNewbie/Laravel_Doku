@@ -1,4 +1,3 @@
-# TUGAS BESAR EAI
 
 #### Install Project
 ```bash
